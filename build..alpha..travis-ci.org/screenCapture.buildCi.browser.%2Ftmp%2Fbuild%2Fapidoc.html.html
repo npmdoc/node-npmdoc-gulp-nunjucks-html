@@ -1,0 +1,154 @@
+<html><head></head><body><div class="apidocDiv">
+<style>
+/*csslint
+*/
+.apidocDiv {
+    background: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.apidocDiv a[href] {
+    color: #33f;
+    font-weight: bold;
+    text-decoration: none;
+}
+.apidocDiv a[href]:hover {
+    text-decoration: underline;
+}
+.apidocCodeCommentSpan {
+    background: #bbf;
+    color: #000;
+    display: block;
+}
+.apidocCodeKeywordSpan {
+    color: #d00;
+    font-weight: bold;
+}
+.apidocCodePre {
+    background: #eef;
+    border: 1px solid;
+    color: #777;
+    padding: 5px;
+    white-space: pre-wrap;
+}
+.apidocFooterDiv {
+    margin-top: 20px;
+    text-align: center;
+}
+.apidocModuleLi {
+    margin-top: 10px;
+}
+.apidocSectionDiv {
+    border-top: 1px solid;
+    margin-top: 20px;
+}
+.apidocSignatureSpan {
+    color: #777;
+    font-weight: bold;
+}
+</style>
+<h1>api documentation for
+    <a>gulp-nunjucks-html (v2.0.0)</a>
+</h1>
+<h4>Render Nunjucks templates to HTML</h4>
+<div class="apidocSectionDiv"><a href="#apidoc.tableOfContents" id="apidoc.tableOfContents"><h1>table of contents</h1></a><ol>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.gulp-nunjucks-html">module gulp-nunjucks-html</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.gulp-nunjucks-html.gulp-nunjucks-html">
+            function <span class="apidocSignatureSpan"></span>gulp-nunjucks-html
+            <span class="apidocSignatureSpan">(opts)</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+</ol></div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.gulp-nunjucks-html" id="apidoc.module.gulp-nunjucks-html">module gulp-nunjucks-html</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.gulp-nunjucks-html.gulp-nunjucks-html" id="apidoc.element.gulp-nunjucks-html.gulp-nunjucks-html">
+        function <span class="apidocSignatureSpan"></span>gulp-nunjucks-html
+        <span class="apidocSignatureSpan">(opts)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function nunjucksBuild(opts) {
+
+  return through.obj(function(file, enc, cb) {
+
+    if (file.isNull()) {
+      return cb(null, file);
+    }
+
+    if (file.isStream()) {
+      return cb(new PluginError(PLUGIN_NAME, 'Streams are not supported'));
+    }
+
+    var options = assign({
+      autoescape: false,
+      locals: {},
+      searchPaths: []
+    }, opts);
+
+    var str = file.contents.toString('utf8');
+    var data = file.data ? file.data : {};
+    var fm = file.frontMatter ? file.frontMatter : {};
+    var context = assign({}, options.locals, data, fm);
+
+    var loader = new nunjucks.FileSystemLoader(options.searchPaths, {
+      watch: false,
+      noCache: false
+    });
+
+    var env = new nunjucks.Environment(loader, (function() {
+      var envOptions = {};
+      ['autoescape', 'tags'].forEach(function(opt) {
+        if (options.hasOwnProperty(opt)) {
+          envOptions[opt] = options[opt];
+        }
+      });
+      return envOptions;
+    })());
+
+    if (options.setUp &amp;&amp; typeof options.setUp === 'function') {
+      env = options.setUp(env);
+    }
+
+    env.renderString(str, context, function(err, res) {
+
+      if (err) {
+        return cb(new PluginError(PLUGIN_NAME, err));
+      }
+
+      file.contents = new Buffer(res);
+
+      if (options.ext) {
+        file.path = gutil.replaceExtension(file.path, opts.ext);
+      }
+
+      cb(null, file);
+
+    });
+
+  });
+
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocFooterDiv">
+    [ this document was created with
+    <a href="https://github.com/kaizhu256/node-utility2" target="_blank">utility2</a>
+    ]
+</div>
+</div>
+</body></html>
